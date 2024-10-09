@@ -20,7 +20,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public BaseResponse<MemberResponseDTO.JoinResultDTO> join(@RequestBody MemberRequestDTO.JoinDTO joinDTO) {
+    public BaseResponse<MemberResponseDTO.JoinResultDTO> join(@RequestBody @Valid MemberRequestDTO.JoinDTO joinDTO) {
         Member member = memberService.join(joinDTO);
         return BaseResponse.onSuccess(MemberConverter.toJoinResult(member));
     }
