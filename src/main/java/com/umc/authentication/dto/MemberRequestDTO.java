@@ -10,8 +10,10 @@ public class MemberRequestDTO {
     @Getter
     public static class JoinDTO {
         @Length(min = 1, max = 30)
+        @NotNull
         private String name;
         @Email
+        @NotNull
         @Length(min = 1, max = 30)
         private String email;
         @NotNull
