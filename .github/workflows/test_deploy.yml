@@ -3,7 +3,7 @@ name: Deploy to AWS EC2 using Docker
 on:
   push:
     branches:
-      - develop
+      - main
 
 env:
   DOCKER_IMAGE_NAME: developerjamey/umc_aos
@@ -34,10 +34,10 @@ jobs:
         run: rm ./src/main/resources/application-jwt.yml
 
       - name: Set up application-database.yml
-        run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application-database.yml
+        run: echo "${{ secrets.APPLICATION_DATABASE }}" > ./src/main/resources/application-database.yml
 
       - name: Set up application-jwt.yml
-        run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application-jwt.yml
+        run: echo "${{ secrets.APPLICATION_JWT }}" > ./src/main/resources/application-jwt.yml
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
