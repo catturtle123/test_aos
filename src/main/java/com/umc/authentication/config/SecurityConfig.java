@@ -41,7 +41,8 @@ public class SecurityConfig {
             "/v3/**",
             "/api-docs/**",
             "/join",
-            "/login"
+            "/login",
+            "/health"
     };
 
 
