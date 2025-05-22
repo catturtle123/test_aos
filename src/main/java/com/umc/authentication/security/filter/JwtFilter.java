@@ -41,12 +41,9 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        if(jwtUtil.isTokenValid(accessToken)) {
+        if (jwtUtil.isTokenValid(accessToken)) {
             Authentication authentication = jwtUtil.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        } else {
-            throw new AuthException(ErrorStatus.AUTH_INVALID_TOKEN);
         }
         filterChain.doFilter(request, response);
     }
