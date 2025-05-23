@@ -27,11 +27,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: delete application-database.yml
-        run: rm ./src/main/resources/application-database.yml
-
-      - name: delete application-jwt.yml
-        run: rm ./src/main/resources/application-jwt.yml
+      - name: Create resources directory if not exists
+        run: mkdir -p ./src/main/resources
 
       - name: Set up application-database.yml
         run: echo "${{ secrets.APPLICATION_DATABASE }}" > ./src/main/resources/application-database.yml
