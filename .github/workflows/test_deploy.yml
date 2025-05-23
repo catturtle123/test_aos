@@ -27,9 +27,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Create resources directory if not exists
-        run: mkdir -p ./src/main/resources
-
       - name: Set up application-database.yml
         run: echo "${{ secrets.APPLICATION_DATABASE }}" > ./src/main/resources/application-database.yml
 
