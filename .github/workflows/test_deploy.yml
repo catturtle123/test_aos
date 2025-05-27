@@ -49,21 +49,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Write YML secret files temporarily
+      - name: Create .env file
         run: |
-          echo "${{ secrets.APPLICATION_JWT }}" > application-jwt.yml
-          echo "${{ secrets.APPLICATION_DATABASE }}" > application-database.yml
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_URL=${{ secrets.DB_URL }}" >> .env
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
+          echo "JWT_ACCESS_TOKEN_TIME=${{ secrets.JWT_ACCESS_TOKEN_TIME }}" >> .env
 
-      - name: Copy YML files to EC2
+      - name: SCP .env file to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_SSH_USER }}
           key: ${{ env.PRIVATE_KEY }}
-          source: "application-*.yml"
+          source: ".env"
           target: "/home/ubuntu/secrets"
 
       - name: Deploy to EC2
@@ -71,6 +71,7 @@ jobs:
         with:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_SSH_USER }}
+          port: 22
           key: ${{ env.PRIVATE_KEY }}
           script: |
             CONTAINER_ID=$(sudo docker ps -q --filter "publish=80-8080")
@@ -90,11 +91,5 @@ jobs:
 
             sudo docker run --name ${{ env.CONTAINER_NAME }} \
               -d -p 8080:8080 \
-              -e TZ=Asia/Seoul \
-              -v /home/ubuntu/secrets/application-jwt.yml:/app/resources/application-jwt.yml \
-              -v /home/ubuntu/secrets/application-database.yml:/app/resources/application-database.yml \
+              --env-file /home/ubuntu/secrets/.env \
               ${{ env.DOCKER_IMAGE_NAME }}
-
-      - name: Clean up local secret files
-        run: rm application-*.yml
-
