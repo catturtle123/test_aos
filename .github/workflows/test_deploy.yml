@@ -74,7 +74,7 @@ jobs:
           port: 22
           key: ${{ env.PRIVATE_KEY }}
           script: |
-            CONTAINER_ID=$(sudo docker ps -q --filter "publish=80-8080")
+            CONTAINER_ID=$(sudo docker ps -aq -f name=${{ env.CONTAINER_NAME }})
 
             if [ ! -z "$CONTAINER_ID" ]; then
               sudo docker stop $CONTAINER_ID
