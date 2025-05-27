@@ -33,9 +33,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test
 
-      - name: rm secret file
-        run: rm ./src/main/resources/application-database.yml ./src/main/resources/application-jwt.yml
-
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag ${{ env.DOCKER_IMAGE_NAME }}:latest
 
